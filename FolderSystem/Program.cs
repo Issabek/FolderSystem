@@ -12,22 +12,6 @@ namespace FolderSystem
         {
             DriveInfo[] allDrives = DriveInfo.GetDrives();
             int option = 0;
-            //var cars = new List<string>()
-            //{
-            //    "Car/",
-            //    "Car/BMW/",
-            //    "Car/Great Wall/",
-            //    "Car/Great Wall/Another/",
-            //    "Car/Great Wall/Another/test - file.bak",
-            //    "Car/Great Wall/Another/second - file.bak",
-            //    "Car/Great Wall/Car/",
-            //    "Car/Great Wall/local - copy.bak",
-            //    "Car/Great Wall/local - copy(2).bak",
-            //    "Car/Mercedes/process - file.bak",
-            //    "Car/Mercedes/process - file(2).bak",
-            //    "Car/test123 - file.bak"
-            //};
-
 
             foreach (DriveInfo d in allDrives)
             {

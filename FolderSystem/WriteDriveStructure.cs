@@ -6,6 +6,6 @@ class WriteAllLines
 {
     public static async Task ExampleAsync(List<string> str)
     {
-        await File.WriteAllLinesAsync("WriteLines.txt", str);
+        await File.WriteAllLinesAsync("Result.txt", str);
     }
 }

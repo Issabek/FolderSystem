@@ -14,12 +14,9 @@ namespace FolderSystem
         {
             paths.Sort();
             int counter = 1;
-            int counterHolder = 1;
             string substring = "";
             int lastIndexOfSlash = 0;
-            string LastFolder = "";
             Dictionary<string, int> occurences = new Dictionary<string, int>();
-            Dictionary<string, int> folders = new Dictionary<string, int>();
 
             List<string> res = new List<string>();
             foreach(string path in paths)
@@ -33,34 +30,25 @@ namespace FolderSystem
                 else
                 {
                     lastIndexOfSlash = path.LastIndexOf('\\');
-                    FileAttributes file = File.GetAttributes(path);
-                    if(!file.HasFlag(FileAttributes.Directory))
+                    if(!path.Substring(lastIndexOfSlash,path.Length-lastIndexOfSlash).Contains('.'))
                     {
                         if (!occurences.ContainsKey(path.Substring(0, lastIndexOfSlash)))
                         {
                             res.Add(path);
                             occurences.Add(path, 1);
-                            
-                            Console.WriteLine(res.Last());
+                            Console.WriteLine(string.Format("{0} {1}", new string('+', (HowMany(path, '\\')) * 2), res.Last().Substring(lastIndexOfSlash,res.Last().Length-lastIndexOfSlash)));
                         }
                         else
                         {
                             res.Add(path);
-                            Console.WriteLine(res.Last());
+                            Console.WriteLine(string.Format("{0} {1}", new string('+', (HowMany(path, '\\')) * 2), res.Last().Substring(lastIndexOfSlash, res.Last().Length - lastIndexOfSlash)));
                         }
                     }
                     
                     else
                     {
-                        //if (LastFolder != path.Split('\\')[path.Split('\\').Count() - 2])
-                        //{
-                        //    LastFolder = path.Split('\\')[path.Split('\\').Count() - 2];
-                        //    res.Add(path.Substring(0,lastIndexOfSlash));
-                        //    Console.WriteLine(res.Last());
-
-                        //}
                         substring = path.Substring(lastIndexOfSlash, path.Length - lastIndexOfSlash );
-                        res.Add(string.Format("{0} {1}", new string('.', HowMany(path, '\\')), substring));
+                        res.Add(string.Format("{0} {1}", new string('.', (HowMany(path, '\\'))*2), substring));
                         Console.WriteLine(res.Last());
                     }
                 }
