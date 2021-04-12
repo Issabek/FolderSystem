@@ -10,21 +10,22 @@ namespace FolderSystem
     public class FolderSystem
     {
         
-        public static List<string> ShowStructure(List<string> paths)
+        public static void ShowStructure(List<string> paths)
         {
             paths.Sort();
             int counter = 1;
             string substring = "";
             int lastIndexOfSlash = 0;
             Dictionary<string, int> occurences = new Dictionary<string, int>();
-
-            List<string> res = new List<string>();
+            TextWriter tw = new StreamWriter("SavedList.txt");
+            //List<string> res = new List<string>();
             foreach(string path in paths)
             {
                 if (counter == 1)
                 {
                     Console.WriteLine(path);
-                    res.Add(path);
+                    //res.Add(path);
+                    tw.WriteLine(path);
                     counter++;
                 }
                 else
@@ -36,26 +37,31 @@ namespace FolderSystem
 
                         if (!occurences.ContainsKey(path.Substring(0, lastIndexOfSlash)))
                         {
-                            res.Add(s);
+                            //res.Add(s);
                             occurences.Add(path, 1);
                             Console.WriteLine(s);
+                            tw.WriteLine(s);
+
                         }
                         else
                         {
-                            res.Add(s);
+                            //res.Add(s);
                             Console.WriteLine(s);
+                            tw.WriteLine(s);
                         }
                     }
                     
                     else
                     {
                         substring = path.Substring(lastIndexOfSlash, path.Length - lastIndexOfSlash );
-                        res.Add(string.Format("{0} {1}", new string('.', (HowMany(path, '\\'))*2), substring));
-                        Console.WriteLine(res.Last());
+                        string s = string.Format("{0} {1}", new string('.', (HowMany(path, '\\'))*2), substring);
+                        Console.WriteLine(s);
+                        tw.WriteLine(s);
+
                     }
                 }
             }
-            return res;
+            tw.Close();
         }
         public static int HowMany(string s, char pattern)
         {
