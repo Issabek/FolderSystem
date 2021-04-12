@@ -33,7 +33,8 @@ namespace FolderSystem
                 else
                 {
                     lastIndexOfSlash = path.LastIndexOf('\\');
-                    if(!path.Substring(lastIndexOfSlash,path.Length-lastIndexOfSlash).Contains('.'))
+                    FileAttributes file = File.GetAttributes(path);
+                    if(!file.HasFlag(FileAttributes.Directory))
                     {
                         if (!occurences.ContainsKey(path.Substring(0, lastIndexOfSlash)))
                         {
@@ -62,7 +63,6 @@ namespace FolderSystem
                         res.Add(string.Format("{0} {1}", new string('.', HowMany(path, '\\')), substring));
                         Console.WriteLine(res.Last());
                     }
-
                 }
             }
             return res;
