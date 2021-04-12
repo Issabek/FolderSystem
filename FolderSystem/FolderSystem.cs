@@ -1,102 +1,83 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Microsoft.VisualBasic.FileIO;
 namespace FolderSystem
 {
-    public class Folder
-    {
-        public string Name { get; set; }
-        public List<Folder> Folders { get; set; } = new List<Folder>();
-        public List<File> Files { get; set; } = new List<File>();
-    }
-
-    public class File
-    {
-        public string Name { get; set; }
-    }
+   
 
     public class FolderSystem
     {
-        public static List<Folder> GetFoldersFormStrings(List<string> strings)
+        
+        public static List<string> ShowStructure(List<string> paths)
         {
-            var folders = new List<Folder>();
-            strings.Sort(StringComparer.InvariantCultureIgnoreCase);
-            var folderByPath = new Dictionary<string, Folder>();
-            foreach (var str in strings)
-            {
-                if (str.EndsWith("/")) // we have a folder
-                {
-                    EnsureFolder(folders, folderByPath, str);
-                }
-                else // we have a file
-                {
-                    var lastSlashPosition = str.LastIndexOf("/");
-                    var parentFolderPath = str.Substring(0, lastSlashPosition + 1);
-                    var parentFolder = EnsureFolder(folders, folderByPath, parentFolderPath);
-                    var fileName = str.Substring(lastSlashPosition + 1);
-                    var file = new File
-                    {
-                        Name = fileName
-                    };
-                    parentFolder.Files.Add(file);
-                }
-            }
-            return folders;
-        }
+            paths.Sort();
+            int counter = 1;
+            int counterHolder = 1;
+            string substring = "";
+            int lastIndexOfSlash = 0;
+            string LastFolder = "";
+            Dictionary<string, int> occurences = new Dictionary<string, int>();
+            Dictionary<string, int> folders = new Dictionary<string, int>();
 
-        public static Folder EnsureFolder(List<Folder> rootFolders, Dictionary<string, Folder> folderByPath, string folderPath)
-        {
-            if (!folderByPath.TryGetValue(folderPath, out var folder))
+            List<string> res = new List<string>();
+            foreach(string path in paths)
             {
-                var folderPathWithoutEndSlash = folderPath.TrimEnd('/');
-                var lastSlashPosition = folderPathWithoutEndSlash.LastIndexOf("/");
-                List<Folder> folders;
-                string folderName;
-                if (lastSlashPosition < 0) // it's a first level folder
+                if (counter == 1)
                 {
-                    folderName = folderPathWithoutEndSlash;
-                    folders = rootFolders;
+                    Console.WriteLine(path);
+                    res.Add(path);
+                    counter++;
                 }
                 else
                 {
-                    var parentFolderPath = folderPath.Substring(0, lastSlashPosition + 1);
-                    folders = folderByPath[parentFolderPath].Folders;
-                    folderName = folderPathWithoutEndSlash.Substring(lastSlashPosition + 1);
+                    lastIndexOfSlash = path.LastIndexOf('\\');
+                    if(!path.Substring(lastIndexOfSlash,path.Length-lastIndexOfSlash).Contains('.'))
+                    {
+                        if (!occurences.ContainsKey(path.Substring(0, lastIndexOfSlash)))
+                        {
+                            res.Add(path);
+                            occurences.Add(path, 1);
+                            
+                            Console.WriteLine(res.Last());
+                        }
+                        else
+                        {
+                            res.Add(path);
+                            Console.WriteLine(res.Last());
+                        }
+                    }
+                    
+                    else
+                    {
+                        //if (LastFolder != path.Split('\\')[path.Split('\\').Count() - 2])
+                        //{
+                        //    LastFolder = path.Split('\\')[path.Split('\\').Count() - 2];
+                        //    res.Add(path.Substring(0,lastIndexOfSlash));
+                        //    Console.WriteLine(res.Last());
+
+                        //}
+                        substring = path.Substring(lastIndexOfSlash, path.Length - lastIndexOfSlash );
+                        res.Add(string.Format("{0} {1}", new string('.', HowMany(path, '\\')), substring));
+                        Console.WriteLine(res.Last());
+                    }
+
                 }
-                folder = new Folder
-                {
-                    Name = folderName
-                };
-                folders.Add(folder);
-                folderByPath.Add(folderPath, folder);
             }
-            return folder;
+            return res;
         }
-
-        public static void ShowFolders(List<Folder> folders)
+        public static int HowMany(string s, char pattern)
         {
-            foreach (var folder in folders)
+            int counter = 0;
+            foreach(char c in s)
             {
-                ShowFolder(folder, 0);
+                if (c == pattern)
+                    counter++;
             }
+            return counter;
         }
-
-        public static void ShowFolder(Folder folder, int indentation)
-        {
-            string folderIndentation = new string(' ', indentation);
-            string fileIndentation = folderIndentation + "  ";
-            Console.WriteLine($"{folderIndentation}-{folder.Name}");
-            foreach (var file in folder.Files)
-            {
-                Console.WriteLine($"{fileIndentation}-{file.Name}");
-            }
-            foreach (var subfolder in folder.Folders)
-            {
-                ShowFolder(subfolder, indentation + 2);
-            }
-        }
-        public static List<string> DirSearch_ex3(string sDir)
+        public static List<string> GetAllPaths(string sDir)
         {
             List<string> dirs = new List<string>();
             try
@@ -110,7 +91,7 @@ namespace FolderSystem
 
                 foreach (string d in Directory.GetDirectories(sDir))
                 {
-                    dirs.AddRange(DirSearch_ex3(d));
+                    dirs.AddRange(GetAllPaths(d));
                 }
             }
             catch (System.Exception excpt)

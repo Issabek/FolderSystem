@@ -45,10 +45,9 @@ namespace FolderSystem
             }
             Console.WriteLine("Enter a number of a drive section to be listed:\n");
             option = Int32.Parse(Console.ReadLine());
-            List<string> s = FolderSystem.DirSearch_ex3(allDrives[option + 1].RootDirectory.FullName);
-            FolderSystem folderSystem = new FolderSystem();
-            var folders = FolderSystem.GetFoldersFormStrings(s);
-            FolderSystem.ShowFolders(folders);
+            List<string> s = FolderSystem.GetAllPaths(allDrives[option -1].RootDirectory.FullName);
+             _ = WriteAllLines.ExampleAsync(FolderSystem.ShowStructure(s));
         }
     }
+
 }
