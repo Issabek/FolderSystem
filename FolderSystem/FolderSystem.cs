@@ -32,16 +32,18 @@ namespace FolderSystem
                     lastIndexOfSlash = path.LastIndexOf('\\');
                     if(!path.Substring(lastIndexOfSlash,path.Length-lastIndexOfSlash).Contains('.'))
                     {
+                        string s = string.Format("{0} {1}", new string('+', (HowMany(path, '\\')) * 2), res.Last().Substring(lastIndexOfSlash, res.Last().Length - lastIndexOfSlash));
+
                         if (!occurences.ContainsKey(path.Substring(0, lastIndexOfSlash)))
                         {
-                            res.Add(path);
+                            res.Add(s);
                             occurences.Add(path, 1);
-                            Console.WriteLine(string.Format("{0} {1}", new string('+', (HowMany(path, '\\')) * 2), res.Last().Substring(lastIndexOfSlash,res.Last().Length-lastIndexOfSlash)));
+                            Console.WriteLine(s);
                         }
                         else
                         {
-                            res.Add(path);
-                            Console.WriteLine(string.Format("{0} {1}", new string('+', (HowMany(path, '\\')) * 2), res.Last().Substring(lastIndexOfSlash, res.Last().Length - lastIndexOfSlash)));
+                            res.Add(s);
+                            Console.WriteLine(s);
                         }
                     }
                     
