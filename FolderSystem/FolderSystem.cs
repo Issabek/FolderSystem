@@ -32,7 +32,7 @@ namespace FolderSystem
                     lastIndexOfSlash = path.LastIndexOf('\\');
                     if(!path.Substring(lastIndexOfSlash,path.Length-lastIndexOfSlash).Contains('.'))
                     {
-                        string s = string.Format("{0} {1}", new string('+', (HowMany(path, '\\')) * 2), res.Last().Substring(lastIndexOfSlash, res.Last().Length - lastIndexOfSlash));
+                        string s = string.Format("{0} {1}", new string('+', (HowMany(path, '\\')) * 2), path.Substring(lastIndexOfSlash, path.Length - lastIndexOfSlash));
 
                         if (!occurences.ContainsKey(path.Substring(0, lastIndexOfSlash)))
                         {
